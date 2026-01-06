@@ -23,4 +23,9 @@ public class Employee {
     public String getRole () {
         return role;
     }
+    public String getApprovalRole() {
+    return "Employee";
+    }
 }
+
+

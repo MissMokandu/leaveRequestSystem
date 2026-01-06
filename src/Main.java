@@ -1,12 +1,25 @@
 import model.Employee;
+import model.LeaveRequest;
 
 public class Main {
     public static void main(String[] args) {
 
-        Employee emp = new Employee(1, "Benadette", "Employee");
+        Employee emp = new Employee(1, "Alice", "Employee");
 
-        System.out.println("Employee ID: " + emp.getId());
-        System.out.println("Employee Name: " + emp.getName());
-        System.out.println("Employee Role: " + emp.getRole());
+        LeaveRequest leave = new LeaveRequest(
+                101,
+                "2026-01-10",
+                "2026-01-15",
+                "Annual leave",
+                emp
+        );
+
+        System.out.println(leave.getSummary());
+
+        leave.approve();
+
+        System.out.println("After approval:");
+        System.out.println(leave.getSummary());
     }
 }
+

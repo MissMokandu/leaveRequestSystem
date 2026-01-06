@@ -12,30 +12,60 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("================================");
+        System.out.println("  LEAVE REQUEST SYSTEM");
+        System.out.println("================================");
+
         while (true) {
-            System.out.println("\nLeave Request System");
-            System.out.println("1. Apply for Leave (Employee)");
-            System.out.println("2. Approve / Reject Leave (Manager)");
-            System.out.println("3. View Leave Status");
+            System.out.println("\nLogin as:");
+            System.out.println("1. Employee");
+            System.out.println("2. Employer");
             System.out.println("0. Exit");
 
-            System.out.print("Choose an option: ");
-            int choice = scanner.nextInt();
+            System.out.print("Choose role: ");
+            int role = scanner.nextInt();
             scanner.nextLine(); 
+
+            if (role == 1) {
+                employeeFlow(scanner);
+            } else if (role == 2) {
+                employerFlow(scanner);
+            } else if (role == 0) {
+                System.out.println("Exiting system. Goodbye!");
+                scanner.close();
+                return;
+            } else {
+                System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    static void employeeFlow(Scanner scanner) {
+
+        System.out.println("Enter your name: ");
+        String name = scanner.nextLine();
+
+        Employee emp = new Employee(1, name, "Employee");
+
+        while (true) {
+            System.out.println("\n--- Employee Menu ---");
+            System.out.println("1. Apply for Leave");
+            System.out.println("2. View Leave Status");
+            System.out.println("0. Logout");
+
+            System.out.println("Choose: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    applyForLeave(scanner);
+                    applyForLeave(scanner, emp);
                     break;
                 case 2:
-                    processLeave(scanner);
-                    break;
-                case 3:
                     viewLeave();
                     break;
                 case 0:
-                    System.out.println("Goodbye!");
-                    scanner.close();
+                    System.out.println("Employee logged out.");
                     return;
                 default:
                     System.out.println("Invalid option.");
@@ -43,20 +73,41 @@ public class Main {
         }
     }
 
-    static void applyForLeave(Scanner scanner) {
+    static void employerFlow(Scanner scanner) {
 
-        System.out.print("Enter employee name: ");
-        String name = scanner.nextLine();
+        Employer employer = new Employer(2, "Employer");
 
-        if (name.isEmpty()) {
-            System.out.println("Name cannot be empty.");
-            return;
+        while (true) {
+            System.out.println("\n--- Manager Menu ---");
+            System.out.println("1. View & Process Leave Request");
+            System.out.println("0. Logout");
+
+            System.out.println("Choose: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    processLeave(scanner);
+                    break;
+                case 0:
+                    System.out.println("Employer logged out.");
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+            }
         }
+    }
+
+    static void applyForLeave(Scanner scanner, Employee emp) {
 
         System.out.print("Enter leave reason: ");
         String reason = scanner.nextLine();
 
-        Employee emp = new Employee(1, name, "Employee");
+        if (reason.isEmpty()) {
+            System.out.println("Leave reason cannot be empty.");
+            return;
+        }
 
         currentLeave = new LeaveRequest(
                 1001,
@@ -72,32 +123,34 @@ public class Main {
     static void processLeave(Scanner scanner) {
 
         if (currentLeave == null) {
-            System.out.println("No leave request to process.");
+            System.out.println("No leave request available.");
             return;
         }
 
-        System.out.println("1. Approve Leave");
+        System.out.println("\nLeave Details:");
+        System.out.println(currentLeave.getSummary());
+
+        System.out.println("\n1. Approve Leave");
         System.out.println("2. Reject Leave");
-        System.out.print("Choose: ");
+        System.out.println("Choose: ");
         int decision = scanner.nextInt();
         scanner.nextLine();
 
         if (decision == 1) {
             currentLeave.approve();
-            System.out.println("Leave approved by employer.");
+            System.out.println("Leave approved.");
         } else if (decision == 2) {
             currentLeave.reject();
-            System.out.println("Leave rejected by employer.");
+            System.out.println("Leave rejected.");
         } else {
-            System.out.println("Invalid choice.");
+            System.out.println("Invalid option.");
         }
     }
 
-  
     static void viewLeave() {
 
         if (currentLeave == null) {
-            System.out.println("No leave request available.");
+            System.out.println("No leave request submitted yet.");
         } else {
             System.out.println(currentLeave.getSummary());
         }

@@ -31,8 +31,9 @@ public class LeaveRequest {
     }
 
     public String getSummary() {
-        return "LeaveRequest #" + requestId +
-               " | Employee: " + employee.getName() +
-               " | Status: " + status;
+    return "Leave Request ID: " + requestId +
+           "\nEmployee: " + employee.getName() +
+           "\nReason: " + reason +
+           "\nStatus: " + status;
     }
 }
